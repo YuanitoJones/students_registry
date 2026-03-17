@@ -1,83 +1,49 @@
 "use client";
 import { Table } from "@/components/ui/table";
-import { Box, VStack } from "@chakra-ui/react";
+import studentRegistryClient from "@/lib/api/studentRegistryClient";
+import { IStudent } from "@/lib/types/globalTypes";
+import { Box, Text, VStack } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Dashboard() {
-   const [data, setData] = useState([{ x: Date.now(), y: 0 }]);
+   const router = useRouter();
+   const [data, setData] = useState<IStudent[]>([]);
 
    useEffect(() => {
-      // Simulate streaming updates
-      setData((prev) => [...prev.slice(-49), { x: Date.now(), y: Math.random() * 100 }]);
-      // const interval = setInterval(() => {
-      // }, 1000);
-      // return () => clearInterval(interval);
+      const getStudents = async () => {
+         const response = await studentRegistryClient.getAllStudents();
+         setData(response);
+      };
+      getStudents();
    }, []);
 
    return (
-      <VStack>
+      <VStack gap={10}>
+         <Text fontSize={"2xl"} fontWeight={"bold"}>
+            Estudiantes Registrados
+         </Text>
          <Box>
             <Table
+               interactive
+               onRowClick={(_e, index) => {
+                  console.log("Clicked row: ", data[index]);
+                  router.replace(`/students/${data[index].student_id}`);
+               }}
                pageSize={5}
                scrollBehavior={"smooth"}
-               width={"md"}
-               headers={[{ title: "header 1" }, { title: "header2" }, { title: "header3" }, { title: "header4" }]}
-               body={[
-                  {
-                     children: [<div>ola1</div>, <div>jeje</div>, <div>adios</div>, <div>popo</div>],
-                  },
-                  {
-                     children: [<div>ola2</div>, <div>juju</div>, <div>adios</div>, <div>popo</div>],
-                  },
-                  {
-                     children: [<div>ola3</div>, <div>juju</div>, <div>adios</div>, <div>popo</div>],
-                  },
-                  {
-                     children: [<div>ola4</div>, <div>juju</div>, <div>adios</div>, <div>popo</div>],
-                  },
-                  {
-                     children: [<div>ola5</div>, <div>juju</div>, <div>adios</div>, <div>popo</div>],
-                  },
-                  {
-                     children: [<div>ola6</div>, <div>juju</div>, <div>adios</div>, <div>popo</div>],
-                  },
-                  {
-                     children: [<div>ola7</div>, <div>juju</div>, <div>adios</div>, <div>popo</div>],
-                  },
-                  {
-                     children: [<div>ola8</div>, <div>juju</div>, <div>adios</div>, <div>popo</div>],
-                  },
-                  {
-                     children: [<div>ola9</div>, <div>juju</div>, <div>adios</div>, <div>popo</div>],
-                  },
-                  {
-                     children: [<div>ola10</div>, <div>juju</div>, <div>adios</div>, <div>popo</div>],
-                  },
-                  {
-                     children: [<div>ola11</div>, <div>juju</div>, <div>adios</div>, <div>popo</div>],
-                  },
-                  {
-                     children: [<div>ola12</div>, <div>juju</div>, <div>adios</div>, <div>popo</div>],
-                  },
-                  {
-                     children: [<div>ola13</div>, <div>juju</div>, <div>adios</div>, <div>popo</div>],
-                  },
-                  {
-                     children: [<div>ola14</div>, <div>juju</div>, <div>adios</div>, <div>popo</div>],
-                  },
-                  {
-                     children: [<div>ola15</div>, <div>juju</div>, <div>adios</div>, <div>popo</div>],
-                  },
-                  {
-                     children: [<div>ola16</div>, <div>juju</div>, <div>adios</div>, <div>popo</div>],
-                  },
-                  {
-                     children: [<div>ola17</div>, <div>juju</div>, <div>adios</div>, <div>popo</div>],
-                  },
-                  {
-                     children: [<div>ola18</div>, <div>juju</div>, <div>adios</div>, <div>popo</div>],
-                  },
-               ]}
+               width={"1400px"}
+               headers={[{ title: "Nombre" }, { title: "Apellido" }, { title: "Correo" }, { title: "Teléfono" }]}
+               body={data.map((student: IStudent) => {
+                  return {
+                     children: [
+                        <div>{`${student.first_name} ${student.middle_name}`}</div>,
+                        <div>{student.last_name}</div>,
+                        <div>{student.emails[0]?.email}</div>,
+                        <div>{student.phones[0]?.phone}</div>,
+                     ],
+                  };
+               })}
             />
          </Box>
       </VStack>

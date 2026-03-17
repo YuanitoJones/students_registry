@@ -19,10 +19,11 @@ export interface TableProps extends ChakraTable.RootProps {
    body: ITableBody[];
    disableheaders?: boolean;
    pageSize?: number;
+   onRowClick?: (rowData: any, index: number) => void;
 }
 
 export const Table = React.forwardRef<HTMLTableElement, TableProps>(function Table(props, ref) {
-   const { headers, body, disableheaders = false, pageSize = 10, ...rest } = props;
+   const { headers, body, disableheaders = false, pageSize = 10, onRowClick, ...rest } = props;
    const [page, setPage] = useState(1);
 
    function onPageChange(e: PaginationPageChangeDetails) {
@@ -53,7 +54,7 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(function Tab
                   {(row, index) => (
                      <ChakraTable.Row
                         onClick={() => {
-                           console.log("ola");
+                           onRowClick && onRowClick(row, index);
                         }}
                         key={`table-row-${index}`}
                      >
