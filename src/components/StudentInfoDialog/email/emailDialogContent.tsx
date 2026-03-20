@@ -20,7 +20,7 @@ const EmailDialogContent = ({ email }: { email: IEmail }) => {
          const response = await studentRegistryClient.updateEmail({ ...emailState, ogEmail: email.email });
          toaster.create({
             description: "Correo actualizado exitosamente.",
-            type: "info",
+            type: "success",
          });
          UPDATE_EMAIL(emails, email.email, response);
          SET_EDIT_DIALOG(false);
@@ -41,7 +41,7 @@ const EmailDialogContent = ({ email }: { email: IEmail }) => {
          await studentRegistryClient.deleteEmail(email.email);
          toaster.create({
             description: "Correo eliminado exitosamente.",
-            type: "info",
+            type: "success",
          });
          DELETE_EMAIL(emails, email.email);
          SET_EDIT_DIALOG(false);

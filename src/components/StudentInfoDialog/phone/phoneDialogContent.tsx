@@ -20,7 +20,7 @@ const PhoneDialogContent = ({ phone }: { phone: IPhone }) => {
          const response = await studentRegistryClient.updatePhoneNumber(phoneState);
          toaster.create({
             description: "Número de teléfono actualizado exitosamente.",
-            type: "info",
+            type: "success",
          });
          UPDATE_PHONE(phones, phone.phone_id, response);
          SET_EDIT_DIALOG(false);
@@ -41,7 +41,7 @@ const PhoneDialogContent = ({ phone }: { phone: IPhone }) => {
          await studentRegistryClient.deletePhoneNumber(phoneState.phone_id);
          toaster.create({
             description: "Número de teléfono eliminado exitosamente.",
-            type: "info",
+            type: "success",
          });
          DELETE_PHONE(phones, phone.phone_id);
          SET_EDIT_DIALOG(false);

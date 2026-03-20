@@ -7,16 +7,17 @@ import EmailDialogContent from "@/components/StudentInfoDialog/email/emailDialog
 import EmailRegistercontent from "@/components/StudentInfoDialog/email/emailRegisterContent";
 import PhoneDialogContent from "@/components/StudentInfoDialog/phone/phoneDialogContent";
 import PhoneRegisterContent from "@/components/StudentInfoDialog/phone/phoneRegisterContent";
-import DialogComponent from "@/components/ui/dialogComponent";
+import DialogComponent from "@/components/Dialogs/dialogComponent";
 import InfoField from "@/components/ui/infoField";
 import { toaster } from "@/components/ui/toaster";
 import studentRegistryClient from "@/lib/api/studentRegistryClient";
 import { StudentContext } from "@/lib/context/studentContext";
 import { IAddress, IEmail, IPhone } from "@/lib/types/globalTypes";
-import { Box, HStack, IconButton, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, HStack, IconButton, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
 import { LuTrash } from "react-icons/lu";
+import ConfirmationDialog from "@/components/Dialogs/confirmationDialog";
 
 function StudentScreen() {
    const router = useRouter();
@@ -24,6 +25,7 @@ function StudentScreen() {
    if (!studentContext) throw new Error("no student context in provider");
    const { student_id, editDialog, registerdialog, SET_EDIT_DIALOG, SET_REGISTER_DIALOG, ...studentData } =
       studentContext;
+   const [openConfirmationmodal, setOpenConfirmationModal] = useState<boolean>(false);
    const [dialogContext, setDialogContext] = useState<any | undefined>(undefined);
    const [dialogType, setDialogType] = useState<"phone" | "email" | "address" | undefined>(undefined);
 
@@ -69,7 +71,7 @@ function StudentScreen() {
                         top={0}
                         variant={"ghost"}
                         color={"red"}
-                        onClick={() => handleDelete()}
+                        onClick={() => setOpenConfirmationModal(true)}
                      >
                         <LuTrash />
                      </IconButton>
@@ -128,6 +130,15 @@ function StudentScreen() {
                <RegisterContent type={dialogType} />
             </DialogComponent>
          )}
+         <ConfirmationDialog title="Eliminar usuario" open={openConfirmationmodal} setOpen={setOpenConfirmationModal}>
+            <Text textAlign={"center"} fontSize={"16px"} fontWeight={"600"}>
+               Estás seguro de eliminar al estudiante?
+            </Text>
+            <HStack pt={10} width={"100%"} display={"flex"} justifyContent={"space-around"}>
+               <Button onClick={() => setOpenConfirmationModal(false)}>Cancelar</Button>
+               <Button onClick={() => handleDelete()}>Confirmar</Button>
+            </HStack>
+         </ConfirmationDialog>
       </VStack>
    );
 }

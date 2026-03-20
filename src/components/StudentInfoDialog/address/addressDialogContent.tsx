@@ -20,7 +20,7 @@ const AddressDialogContent = ({ address }: { address: IAddress }) => {
          const response = await studentRegistryClient.updateAddress(addresState);
          toaster.create({
             description: "Dirección actualizada exitosamente.",
-            type: "info",
+            type: "success",
          });
          UPDATE_ADDRESS(addresses, address.address_id, response);
          SET_EDIT_DIALOG(false);
@@ -41,7 +41,7 @@ const AddressDialogContent = ({ address }: { address: IAddress }) => {
          await studentRegistryClient.deleteAddress(address.address_id);
          toaster.create({
             description: "Dirección eliminada exitosamente.",
-            type: "info",
+            type: "success",
          });
          DELETE_ADDRESS(addresses, address.address_id);
          SET_EDIT_DIALOG(false);

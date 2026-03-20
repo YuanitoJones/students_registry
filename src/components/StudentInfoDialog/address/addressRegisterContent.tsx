@@ -27,7 +27,7 @@ const AddressRegistercontent = () => {
          });
          toaster.create({
             description: "Dirección asignado exitosamente.",
-            type: "info",
+            type: "success",
          });
          ADD_ADDRESS(response);
          SET_REGISTER_DIALOG(false);

@@ -22,7 +22,7 @@ const EmailRegistercontent = () => {
          const response = await studentRegistryClient.createEmail({ ...emailState, student_id: Number(student_id) });
          toaster.create({
             description: "Correo asignado exitosamente.",
-            type: "info",
+            type: "success",
          });
          ADD_EMAIL(response);
          SET_REGISTER_DIALOG(false);

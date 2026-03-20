@@ -26,7 +26,7 @@ const PhoneRegisterContent = () => {
          });
          toaster.create({
             description: "Número de teléfono asignado exitosamente.",
-            type: "info",
+            type: "success",
          });
          ADD_PHONE(response);
          SET_REGISTER_DIALOG(false);
