@@ -15,7 +15,6 @@ const AddressDialogContent = ({ address }: { address: IAddress }) => {
    const [dangerZone, setDangerZone] = useState<boolean>(false);
    const [tries, setTries] = useState<number>(0);
 
-   console.log({ address });
    const handleSubmit = async () => {
       try {
          const response = await studentRegistryClient.updateAddress(addresState);

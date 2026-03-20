@@ -129,7 +129,7 @@ class StudentsClient extends ApiClient {
    async deleteAddress(address_id: number) {
       try {
          const response = await this.delete(`/address`, {
-            address_id,
+            params: { address_id },
          });
          return response.data;
       } catch (error) {

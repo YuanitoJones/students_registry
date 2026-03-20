@@ -1,6 +1,7 @@
 import CardComponent from "@/components/Cards/CardComponent";
 import VariableSizeCarousel from "@/components/Carrousels/VariableSizeCarrousel";
 import AddressDialogContent from "@/components/StudentInfoDialog/address/addressDialogContent";
+import AddressRegistercontent from "@/components/StudentInfoDialog/address/addressRegisterContent";
 import EmailDialogContent from "@/components/StudentInfoDialog/email/emailDialogContent";
 import EmailRegistercontent from "@/components/StudentInfoDialog/email/emailRegisterContent";
 import PhoneDialogContent from "@/components/StudentInfoDialog/phone/phoneDialogContent";
@@ -84,7 +85,7 @@ function StudentScreen() {
                            items={studentData.addresses}
                            component="address"
                            orientation="vertical"
-                           slidesPerPage={2}
+                           slidesPerPage={1}
                            onClick={(reg, e) => handleOnClick({ reg, e, type: "address" })}
                         />
                      </HStack>
@@ -112,6 +113,20 @@ function DialogContent<T extends IPhone | IEmail | IAddress>({ content }: { cont
 }
 
 function RegisterContent({ type }: { type: "phone" | "email" | "address" }) {
-   if (type === "phone") return <PhoneRegisterContent />;
-   if (type === "email") return <EmailRegistercontent />;
+   let component;
+   switch (type) {
+      case "phone":
+         component = <PhoneRegisterContent />;
+         break;
+      case "email":
+         component = <EmailRegistercontent />;
+         break;
+      case "address":
+         component = <AddressRegistercontent />;
+         break;
+      default:
+         component = <div />;
+         break;
+   }
+   return component;
 }

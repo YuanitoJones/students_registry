@@ -1,12 +1,16 @@
 import { IPhone } from "@/lib/types/globalTypes";
 import { Box, Button, HStack, IconButton, Input, Text, VStack } from "@chakra-ui/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import studentRegistryClient from "@/lib/api/studentRegistryClient";
 import { LuEllipsisVertical } from "react-icons/lu";
 import { Presence } from "@ark-ui/react";
 import { toaster } from "@/components/ui/toaster";
+import { StudentContext } from "@/lib/context/studentContext";
 
 const PhoneDialogContent = ({ phone }: { phone: IPhone }) => {
+   const studentContext = useContext(StudentContext);
+   if (!studentContext) throw new Error("Student context not in provider");
+   const { phones, UPDATE_PHONE, DELETE_PHONE, SET_EDIT_DIALOG } = studentContext;
    const [phoneState, setPhoneState] = useState<IPhone>(phone);
    const [dangerZone, setDangerZone] = useState<boolean>(false);
    const [tries, setTries] = useState<number>(0);
@@ -18,6 +22,8 @@ const PhoneDialogContent = ({ phone }: { phone: IPhone }) => {
             description: "Número de teléfono actualizado exitosamente.",
             type: "info",
          });
+         UPDATE_PHONE(phones, phone.phone_id, response);
+         SET_EDIT_DIALOG(false);
       } catch (err) {
          toaster.create({
             description: "Error al actualizar número teleefónico.",
@@ -37,6 +43,8 @@ const PhoneDialogContent = ({ phone }: { phone: IPhone }) => {
             description: "Número de teléfono eliminado exitosamente.",
             type: "info",
          });
+         DELETE_PHONE(phones, phone.phone_id);
+         SET_EDIT_DIALOG(false);
       } catch (err) {
          toaster.create({
             description: "Error al eliminar número telefónico.",
@@ -76,7 +84,7 @@ const PhoneDialogContent = ({ phone }: { phone: IPhone }) => {
          </VStack>
          <HStack wrap={"wrap"}>
             <Input
-               placeholder="Correo"
+               placeholder="Número telefónico"
                defaultValue={phoneState.phone}
                onChange={(e) => handleChange("phone", e.target.value)}
             />

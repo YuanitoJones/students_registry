@@ -9,7 +9,7 @@ import { StudentContext } from "@/lib/context/studentContext";
 const EmailRegistercontent = () => {
    const studentContext = useContext(StudentContext);
    if (!studentContext) throw new Error("no student context in provider");
-   const { ADD_EMAIL } = studentContext;
+   const { ADD_EMAIL, SET_REGISTER_DIALOG } = studentContext;
    const { student_id } = useParams();
    const initialState = {
       email: "",
@@ -25,6 +25,7 @@ const EmailRegistercontent = () => {
             type: "info",
          });
          ADD_EMAIL(response);
+         SET_REGISTER_DIALOG(false);
       } catch (err) {
          toaster.create({
             description: "Error al crear correo.",
@@ -51,7 +52,7 @@ const EmailRegistercontent = () => {
             />
          </HStack>
          <HStack mt={5} width={"100%"} justifyContent={"flex-end"} gap={10}>
-            <Button onClick={() => setEmailState(initialState)} variant={"outline"} type="button">
+            <Button onClick={() => SET_REGISTER_DIALOG(false)} variant={"outline"} type="button">
                Cancelar
             </Button>
             <Button onClick={handleSubmit} type="submit">
