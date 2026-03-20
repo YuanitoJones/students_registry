@@ -118,7 +118,7 @@ class StudentsClient extends ApiClient {
       const { address_id, ...addressData } = data;
       try {
          const response = await this.put(`/address`, addressData, {
-            address_id,
+            params: { address_id },
          });
          return response.data;
       } catch (error) {

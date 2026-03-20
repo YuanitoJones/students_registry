@@ -1,16 +1,21 @@
 import { IAddress } from "@/lib/types/globalTypes";
 import { Box, Button, HStack, IconButton, Input, Text, Textarea, VStack } from "@chakra-ui/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import studentRegistryClient from "@/lib/api/studentRegistryClient";
 import { LuEllipsisVertical } from "react-icons/lu";
 import { Presence } from "@ark-ui/react";
-import { Toaster, toaster } from "@/components/ui/toaster";
+import { toaster } from "@/components/ui/toaster";
+import { StudentContext } from "@/lib/context/studentContext";
 
 const AddressDialogContent = ({ address }: { address: IAddress }) => {
+   const studentContext = useContext(StudentContext);
+   if (!studentContext) throw new Error("Student context not in provider");
+   const { addresses, UPDATE_ADDRESS, DELETE_ADDRESS, SET_EDIT_DIALOG } = studentContext;
    const [addresState, setAddresState] = useState<IAddress>(address);
    const [dangerZone, setDangerZone] = useState<boolean>(false);
    const [tries, setTries] = useState<number>(0);
 
+   console.log({ address });
    const handleSubmit = async () => {
       try {
          const response = await studentRegistryClient.updateAddress(addresState);
@@ -18,6 +23,8 @@ const AddressDialogContent = ({ address }: { address: IAddress }) => {
             description: "Dirección actualizada exitosamente.",
             type: "info",
          });
+         UPDATE_ADDRESS(addresses, address.address_id, response);
+         SET_EDIT_DIALOG(false);
       } catch (err) {
          toaster.create({
             description: "Error al actualizar dirección.",
@@ -37,6 +44,8 @@ const AddressDialogContent = ({ address }: { address: IAddress }) => {
             description: "Dirección eliminada exitosamente.",
             type: "info",
          });
+         DELETE_ADDRESS(addresses, address.address_id);
+         SET_EDIT_DIALOG(false);
       } catch (err) {
          toaster.create({
             description: "Error al eliminar dirección.",
@@ -87,23 +96,24 @@ const AddressDialogContent = ({ address }: { address: IAddress }) => {
             />
             <Input
                placeholder="Ciudad"
-               defaultValue={addresState.state}
+               defaultValue={addresState.city}
                onChange={(e) => handleChange("city", e.target.value)}
             />
             <Textarea
                placeholder="Dirección"
                maxLines={2}
                defaultValue={addresState.address_line}
-               onChange={(e) => handleChange("state", e.target.value)}
+               onChange={(e) => handleChange("address_line", e.target.value)}
             />
          </HStack>
          <HStack mt={5} width={"100%"} justifyContent={"flex-end"} gap={10}>
             <Button onClick={() => {}} variant={"outline"}>
                Cancelar
             </Button>
-            <Button onClick={handleSubmit}>Guardar</Button>
+            <Button onClick={handleSubmit} type="button">
+               Guardar
+            </Button>
          </HStack>
-         <Toaster />
       </Box>
    );
 };

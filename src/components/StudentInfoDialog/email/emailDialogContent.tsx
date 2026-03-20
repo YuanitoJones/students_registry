@@ -1,12 +1,16 @@
 import { IEmail } from "@/lib/types/globalTypes";
 import { Box, Button, HStack, IconButton, Input, Text, VStack } from "@chakra-ui/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import studentRegistryClient from "@/lib/api/studentRegistryClient";
 import { LuEllipsisVertical } from "react-icons/lu";
 import { Presence } from "@ark-ui/react";
-import { Toaster, toaster } from "@/components/ui/toaster";
+import { toaster } from "@/components/ui/toaster";
+import { StudentContext } from "@/lib/context/studentContext";
 
 const EmailDialogContent = ({ email }: { email: IEmail }) => {
+   const studentContext = useContext(StudentContext);
+   if (!studentContext) throw new Error("Student context not in provider");
+   const { emails, UPDATE_EMAIL, DELETE_EMAIL, SET_EDIT_DIALOG } = studentContext;
    const [emailState, setEmailState] = useState<IEmail>(email);
    const [dangerZone, setDangerZone] = useState<boolean>(false);
    const [tries, setTries] = useState<number>(0);
@@ -18,6 +22,8 @@ const EmailDialogContent = ({ email }: { email: IEmail }) => {
             description: "Correo actualizado exitosamente.",
             type: "info",
          });
+         UPDATE_EMAIL(emails, email.email, response);
+         SET_EDIT_DIALOG(false);
       } catch (err) {
          toaster.create({
             description: "Error al actualizar correo.",
@@ -37,6 +43,8 @@ const EmailDialogContent = ({ email }: { email: IEmail }) => {
             description: "Correo eliminado exitosamente.",
             type: "info",
          });
+         DELETE_EMAIL(emails, email.email);
+         SET_EDIT_DIALOG(false);
       } catch (err) {
          toaster.create({
             description: "Error al eliminar correo.",
@@ -87,12 +95,13 @@ const EmailDialogContent = ({ email }: { email: IEmail }) => {
             />
          </HStack>
          <HStack mt={5} width={"100%"} justifyContent={"flex-end"} gap={10}>
-            <Button onClick={handleSubmit} variant={"outline"}>
+            <Button onClick={() => SET_EDIT_DIALOG(false)} variant={"outline"}>
                Cancelar
             </Button>
-            <Button onClick={handleSubmit}>Guardar</Button>
+            <Button onClick={() => handleSubmit()} type="button">
+               Guardar
+            </Button>
          </HStack>
-         <Toaster />
       </Box>
    );
 };

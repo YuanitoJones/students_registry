@@ -4,7 +4,7 @@ import { useState } from "react";
 import studentRegistryClient from "@/lib/api/studentRegistryClient";
 import { LuEllipsisVertical } from "react-icons/lu";
 import { Presence } from "@ark-ui/react";
-import { Toaster, toaster } from "@/components/ui/toaster";
+import { toaster } from "@/components/ui/toaster";
 
 const PhoneDialogContent = ({ phone }: { phone: IPhone }) => {
    const [phoneState, setPhoneState] = useState<IPhone>(phone);
@@ -102,7 +102,6 @@ const PhoneDialogContent = ({ phone }: { phone: IPhone }) => {
             </Button>
             <Button onClick={handleSubmit}>Guardar</Button>
          </HStack>
-         <Toaster />
       </Box>
    );
 };

@@ -7,14 +7,17 @@ import PhoneDialogContent from "@/components/StudentInfoDialog/phone/phoneDialog
 import PhoneRegisterContent from "@/components/StudentInfoDialog/phone/phoneRegisterContent";
 import DialogComponent from "@/components/ui/dialogComponent";
 import InfoField from "@/components/ui/infoField";
-import { IAddress, IEmail, IPhone, IStudent } from "@/lib/types/globalTypes";
+import { StudentContext } from "@/lib/context/studentContext";
+import { IAddress, IEmail, IPhone } from "@/lib/types/globalTypes";
 import { HStack, Text, VStack } from "@chakra-ui/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
-function StudentScreen({ studentData }: { studentData: IStudent | undefined }) {
-   const [openDialog, setOpenDialog] = useState(false);
+function StudentScreen() {
+   const studentContext = useContext(StudentContext);
+   if (!studentContext) throw new Error("no student context in provider");
+   const { student_id, editDialog, registerdialog, SET_EDIT_DIALOG, SET_REGISTER_DIALOG, ...studentData } =
+      studentContext;
    const [dialogContext, setDialogContext] = useState<any | undefined>(undefined);
-   const [openRegister, setOpenRegister] = useState(false);
    const [dialogType, setDialogType] = useState<"phone" | "email" | "address" | undefined>(undefined);
 
    const handleOnClick = <T extends IPhone | IEmail | IAddress>({
@@ -28,10 +31,10 @@ function StudentScreen({ studentData }: { studentData: IStudent | undefined }) {
    }) => {
       if (reg) {
          setDialogType(type);
-         setOpenRegister(true);
+         SET_REGISTER_DIALOG(true);
       } else {
          setDialogContext(e);
-         setOpenDialog(true);
+         SET_EDIT_DIALOG(true);
       }
    };
    return (
@@ -46,7 +49,7 @@ function StudentScreen({ studentData }: { studentData: IStudent | undefined }) {
                ),
             }}
             body={{
-               children: !studentData ? (
+               children: !student_id ? (
                   <Text textAlign={"center"}>Cargando...</Text>
                ) : (
                   <VStack gap={5}>
@@ -89,11 +92,11 @@ function StudentScreen({ studentData }: { studentData: IStudent | undefined }) {
                ),
             }}
          />
-         <DialogComponent open={openDialog} setOpen={setOpenDialog} title="Modificar estudiante">
+         <DialogComponent title="Modificar estudiante" open={editDialog} setOpen={(open) => SET_EDIT_DIALOG(open)}>
             <DialogContent content={dialogContext} />
          </DialogComponent>
          {dialogType && (
-            <DialogComponent open={openRegister} setOpen={setOpenRegister} title="Agregar info">
+            <DialogComponent title="Agregar info" open={registerdialog} setOpen={(open) => SET_REGISTER_DIALOG(open)}>
                <RegisterContent type={dialogType} />
             </DialogComponent>
          )}

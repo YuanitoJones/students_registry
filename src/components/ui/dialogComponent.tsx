@@ -1,4 +1,6 @@
-import { Button, CloseButton, Dialog, Portal } from "@chakra-ui/react";
+import { StudentContext } from "@/lib/context/studentContext";
+import { CloseButton, Dialog, Portal } from "@chakra-ui/react";
+import { useContext } from "react";
 
 interface DialogComponentProps extends Dialog.RootProps {
    open: boolean;
@@ -7,9 +9,11 @@ interface DialogComponentProps extends Dialog.RootProps {
    children: React.ReactNode;
 }
 
-const DialogComponent = ({ open, setOpen, title, children }: DialogComponentProps) => {
+const DialogComponent = ({ title, children, open, setOpen }: DialogComponentProps) => {
+   const studentContext = useContext(StudentContext);
+   if (!studentContext) throw new Error("no student context in provider");
    return (
-      <Dialog.Root lazyMount open={open} onOpenChange={(e) => setOpen(e.open)} placement={"center"}>
+      <Dialog.Root lazyMount open={open} placement={"center"}>
          <Portal>
             <Dialog.Backdrop />
             <Dialog.Positioner>
@@ -20,7 +24,7 @@ const DialogComponent = ({ open, setOpen, title, children }: DialogComponentProp
                      </Dialog.Header>
                   )}
                   <Dialog.Body>{children}</Dialog.Body>
-                  <Dialog.CloseTrigger asChild>
+                  <Dialog.CloseTrigger asChild onClick={() => setOpen(false)}>
                      <CloseButton size="sm" />
                   </Dialog.CloseTrigger>
                </Dialog.Content>

@@ -1,11 +1,15 @@
 import { IEmail } from "@/lib/types/globalTypes";
 import { Box, Button, HStack, Input } from "@chakra-ui/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import studentRegistryClient from "@/lib/api/studentRegistryClient";
-import { Toaster, toaster } from "@/components/ui/toaster";
+import { toaster } from "@/components/ui/toaster";
 import { useParams } from "next/navigation";
+import { StudentContext } from "@/lib/context/studentContext";
 
 const EmailRegistercontent = () => {
+   const studentContext = useContext(StudentContext);
+   if (!studentContext) throw new Error("no student context in provider");
+   const { ADD_EMAIL } = studentContext;
    const { student_id } = useParams();
    const initialState = {
       email: "",
@@ -20,6 +24,7 @@ const EmailRegistercontent = () => {
             description: "Correo asignado exitosamente.",
             type: "info",
          });
+         ADD_EMAIL(response);
       } catch (err) {
          toaster.create({
             description: "Error al crear correo.",
@@ -53,7 +58,6 @@ const EmailRegistercontent = () => {
                Guardar
             </Button>
          </HStack>
-         <Toaster />
       </Box>
    );
 };

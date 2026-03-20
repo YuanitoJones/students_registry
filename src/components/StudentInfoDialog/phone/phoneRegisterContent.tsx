@@ -1,4 +1,4 @@
-import { Toaster, toaster } from "@/components/ui/toaster";
+import { toaster } from "@/components/ui/toaster";
 import studentRegistryClient from "@/lib/api/studentRegistryClient";
 import { IPhone } from "@/lib/types/globalTypes";
 import { Box, Button, HStack, Input } from "@chakra-ui/react";
@@ -62,7 +62,6 @@ const PhoneRegisterContent = () => {
             </Button>
             <Button onClick={handleSubmit}>Guardar</Button>
          </HStack>
-         <Toaster />
       </Box>
    );
 };
