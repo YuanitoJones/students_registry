@@ -25,7 +25,6 @@ const AddressRegistercontent = () => {
             ...addressState,
             student_id: Number(student_id),
          });
-         console.log({ response });
          toaster.create({
             description: "Dirección asignado exitosamente.",
             type: "info",

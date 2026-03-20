@@ -2,9 +2,10 @@
 import { Table } from "@/components/ui/table";
 import studentRegistryClient from "@/lib/api/studentRegistryClient";
 import { IStudent } from "@/lib/types/globalTypes";
-import { Box, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { LuPlus } from "react-icons/lu";
 
 export default function Dashboard() {
    const router = useRouter();
@@ -23,6 +24,12 @@ export default function Dashboard() {
          <Text fontSize={"2xl"} fontWeight={"bold"}>
             Estudiantes Registrados
          </Text>
+         <Box width={"100%"} display={"flex"} justifyContent={"flex-end"} px={8}>
+            <Button size={"xs"} onClick={() => router.replace("/students/register")}>
+               <LuPlus />
+               <Text>Registrar nuevo</Text>
+            </Button>
+         </Box>
          <Box>
             <Table
                interactive

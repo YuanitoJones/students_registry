@@ -30,7 +30,12 @@ class StudentsClient extends ApiClient {
    }
 
    async createStudent(data: any) {
-      return await this.post("/", data);
+      try {
+         const response = await this.post("/student", data);
+         return response.data;
+      } catch (err) {
+         throw err;
+      }
    }
 
    //#region email

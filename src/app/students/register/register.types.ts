@@ -5,7 +5,7 @@ export interface registerStudentForm {
    studentInfo: Omit<IStudent, "student_id" | "emails" | "phones" | "addresses">;
    email: IEmail;
    phone: Omit<IPhone, "phone_id">;
-   address?: IAddress;
+   address: Omit<IAddress, "address_id">;
 }
 
 export type StudentRegistryLogic = {
