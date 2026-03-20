@@ -38,6 +38,18 @@ class StudentsClient extends ApiClient {
       }
    }
 
+   async deleteStudent(student_id: number) {
+      try {
+         const response = await this.delete("/student", {
+            params: {
+               student_id,
+            },
+         });
+      } catch (err) {
+         throw err;
+      }
+   }
+
    //#region email
 
    async createEmail(body: IEmail & { student_id: number }) {

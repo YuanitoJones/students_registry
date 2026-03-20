@@ -51,20 +51,23 @@ export const Table = React.forwardRef<HTMLTableElement, TableProps>(function Tab
             )}
             <ChakraTable.Body>
                <For each={visibleItems}>
-                  {(row, index) => (
-                     <ChakraTable.Row
-                        onClick={() => {
-                           onRowClick && onRowClick(row, index);
-                        }}
-                        key={`table-row-${index}`}
-                     >
-                        <For each={row["children"]}>
-                           {(cell, index) => (
-                              <ChakraTable.Cell key={`cell_value-${cell}-${index}`}>{cell}</ChakraTable.Cell>
-                           )}
-                        </For>
-                     </ChakraTable.Row>
-                  )}
+                  {(row, index) => {
+                     const absoluteIndex = startRange + index;
+                     return (
+                        <ChakraTable.Row
+                           onClick={() => {
+                              onRowClick && onRowClick(row, absoluteIndex);
+                           }}
+                           key={`table-row-${index}`}
+                        >
+                           <For each={row["children"]}>
+                              {(cell, index) => (
+                                 <ChakraTable.Cell key={`cell_value-${cell}-${index}`}>{cell}</ChakraTable.Cell>
+                              )}
+                           </For>
+                        </ChakraTable.Row>
+                     );
+                  }}
                </For>
             </ChakraTable.Body>
          </ChakraTable.Root>

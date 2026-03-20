@@ -8,10 +8,6 @@ export default function Header() {
          title: "Inicio",
          value: "/dashboard",
       },
-      {
-         title: "Iniciar sesión",
-         value: "/login",
-      },
    ];
    return (
       <Box p={3} shadow={"sm"} mb={5}>

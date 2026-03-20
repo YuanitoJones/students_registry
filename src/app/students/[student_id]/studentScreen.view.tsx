@@ -1,3 +1,4 @@
+"use client";
 import CardComponent from "@/components/Cards/CardComponent";
 import VariableSizeCarousel from "@/components/Carrousels/VariableSizeCarrousel";
 import AddressDialogContent from "@/components/StudentInfoDialog/address/addressDialogContent";
@@ -8,12 +9,17 @@ import PhoneDialogContent from "@/components/StudentInfoDialog/phone/phoneDialog
 import PhoneRegisterContent from "@/components/StudentInfoDialog/phone/phoneRegisterContent";
 import DialogComponent from "@/components/ui/dialogComponent";
 import InfoField from "@/components/ui/infoField";
+import { toaster } from "@/components/ui/toaster";
+import studentRegistryClient from "@/lib/api/studentRegistryClient";
 import { StudentContext } from "@/lib/context/studentContext";
 import { IAddress, IEmail, IPhone } from "@/lib/types/globalTypes";
-import { HStack, Text, VStack } from "@chakra-ui/react";
+import { Box, HStack, IconButton, Text, VStack } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
+import { LuTrash } from "react-icons/lu";
 
 function StudentScreen() {
+   const router = useRouter();
    const studentContext = useContext(StudentContext);
    if (!studentContext) throw new Error("no student context in provider");
    const { student_id, editDialog, registerdialog, SET_EDIT_DIALOG, SET_REGISTER_DIALOG, ...studentData } =
@@ -38,15 +44,36 @@ function StudentScreen() {
          SET_EDIT_DIALOG(true);
       }
    };
+
+   const handleDelete = async () => {
+      await studentRegistryClient.deleteStudent(student_id);
+      toaster.create({
+         description: "Estudiante eliminado exitosamente.",
+         type: "success",
+      });
+      router.replace("/dashboard");
+   };
    return (
       <VStack px={10}>
          <CardComponent
             width={"full"}
             title={{
                children: (
-                  <Text fontWeight={600} fontSize={"xl"} textAlign={"center"} mb={0}>
-                     Información de estudiante
-                  </Text>
+                  <Box>
+                     <Text fontWeight={600} fontSize={"xl"} textAlign={"center"} mb={0}>
+                        Información de estudiante
+                     </Text>
+                     <IconButton
+                        position={"absolute"}
+                        right={0}
+                        top={0}
+                        variant={"ghost"}
+                        color={"red"}
+                        onClick={() => handleDelete()}
+                     >
+                        <LuTrash />
+                     </IconButton>
+                  </Box>
                ),
             }}
             body={{

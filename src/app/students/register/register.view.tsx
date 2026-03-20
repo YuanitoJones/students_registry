@@ -8,8 +8,10 @@ import PhoneRegisterStep from "@/components/stepper/phoneRegisterStep";
 import AddressRegisterStep from "@/components/stepper/addressRegisterStep";
 import studentRegistryClient from "@/lib/api/studentRegistryClient";
 import { toaster } from "@/components/ui/toaster";
+import { useRouter } from "next/router";
 
 export function StudentRegistryView() {
+   const router = useRouter();
    const [formData, setFormData] = useState<registerStudentForm>({
       studentInfo: {
          first_name: "",
@@ -47,6 +49,7 @@ export function StudentRegistryView() {
          title: "Estudiante creado con éxito",
          type: "success",
       });
+      router.replace("/dashboard");
    };
 
    return (
