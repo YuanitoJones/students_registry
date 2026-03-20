@@ -3,7 +3,7 @@ import { Input, Text, VStack } from "@chakra-ui/react";
 interface InfoFieldProps {
    label: string;
    value: string;
-   size?: "xs" | "md" | "lg" | "xl";
+   size?: "xs" | "sm" | "md" | "lg" | "xl";
 }
 
 const InfoField = ({ label, value, size = "md" }: InfoFieldProps) => {
@@ -12,7 +12,14 @@ const InfoField = ({ label, value, size = "md" }: InfoFieldProps) => {
          <Text width={"100%"} fontSize={size}>
             {label}
          </Text>
-         <Input value={value} contentEditable={false} size={size} w={"auto"} />
+         <Input
+            value={value}
+            contentEditable={false}
+            size={size}
+            w={"auto"}
+            variant={"subtle"}
+            pointerEvents={"none"}
+         />
       </VStack>
    );
 };

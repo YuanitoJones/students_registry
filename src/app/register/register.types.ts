@@ -4,7 +4,7 @@ import { UseFormHandleSubmit } from "react-hook-form";
 export interface registerStudentForm {
    studentInfo: Omit<IStudent, "student_id" | "emails" | "phones" | "addresses">;
    email: IEmail;
-   phone: IPhone;
+   phone: Omit<IPhone, "phone_id">;
    address?: IAddress;
 }
 

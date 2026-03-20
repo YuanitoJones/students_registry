@@ -1,3 +1,4 @@
+import { IAddress, IEmail, IPhone } from "../types/globalTypes";
 import ApiClient from "./apiClient";
 
 class StudentsClient extends ApiClient {
@@ -31,6 +32,111 @@ class StudentsClient extends ApiClient {
    async createStudent(data: any) {
       return await this.post("/", data);
    }
+
+   //#region email
+
+   async createEmail(body: IEmail & { student_id: number }) {
+      try {
+         const response = await this.post("/email", body);
+         return response.data;
+      } catch (err) {
+         throw err;
+      }
+   }
+
+   async updateEmail(data: IEmail & { ogEmail: string }) {
+      const { ogEmail, ...emailData } = data;
+      try {
+         const response = await this.put(`/email`, emailData, {
+            params: {
+               email: ogEmail,
+            },
+         });
+         return response.data;
+      } catch (error) {
+         throw error;
+      }
+   }
+
+   async deleteEmail(email: string) {
+      try {
+         const response = await this.delete(`/email`, {
+            params: {
+               email,
+            },
+         });
+         return response.data;
+      } catch (error) {
+         throw error;
+      }
+   }
+   //#endregion
+
+   //#region phoneNumber
+
+   async createPhoneNumber(body: Omit<IPhone, "phone_id"> & { student_id: number }) {
+      try {
+         const response = await this.post("/phone", body);
+         return response.data;
+      } catch (err) {
+         throw err;
+      }
+   }
+
+   async updatePhoneNumber(data: IPhone) {
+      const { phone_id, ...phoneData } = data;
+      try {
+         const response = await this.put(`/phone/${phone_id}`, phoneData);
+         return response.data;
+      } catch (error) {
+         throw error;
+      }
+   }
+
+   async deletePhoneNumber(phone_id: number) {
+      try {
+         const response = await this.delete(`/phone/${phone_id}`);
+         return response.data;
+      } catch (error) {
+         throw error;
+      }
+   }
+   //#endregion
+
+   //#region address
+
+   async createAddress(body: Omit<IAddress, "address_id"> & { student_id: number }) {
+      try {
+         const response = await this.post("/address", body);
+         return response.data;
+      } catch (err) {
+         throw err;
+      }
+   }
+
+   async updateAddress(data: IAddress) {
+      const { address_id, ...addressData } = data;
+      try {
+         const response = await this.put(`/address`, addressData, {
+            address_id,
+         });
+         return response.data;
+      } catch (error) {
+         throw error;
+      }
+   }
+
+   async deleteAddress(address_id: number) {
+      try {
+         const response = await this.delete(`/address`, {
+            address_id,
+         });
+         return response.data;
+      } catch (error) {
+         throw error;
+      }
+   }
+   //#endregion
 }
 
 export default new StudentsClient();

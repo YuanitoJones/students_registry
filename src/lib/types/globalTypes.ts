@@ -33,6 +33,7 @@ export interface IEmail {
 }
 
 export interface IPhone {
+   phone_id: number;
    phone: string;
    area_code: string;
    country_code: string;
@@ -40,7 +41,7 @@ export interface IPhone {
 }
 
 export interface IAddress {
-   student_id: number;
+   address_id: number;
    address_line: string;
    city: string;
    zip_postcode: string;

@@ -1,0 +1,100 @@
+import { IEmail } from "@/lib/types/globalTypes";
+import { Box, Button, HStack, IconButton, Input, Text, VStack } from "@chakra-ui/react";
+import { useState } from "react";
+import studentRegistryClient from "@/lib/api/studentRegistryClient";
+import { LuEllipsisVertical } from "react-icons/lu";
+import { Presence } from "@ark-ui/react";
+import { Toaster, toaster } from "@/components/ui/toaster";
+
+const EmailDialogContent = ({ email }: { email: IEmail }) => {
+   const [emailState, setEmailState] = useState<IEmail>(email);
+   const [dangerZone, setDangerZone] = useState<boolean>(false);
+   const [tries, setTries] = useState<number>(0);
+
+   const handleSubmit = async () => {
+      try {
+         const response = await studentRegistryClient.updateEmail({ ...emailState, ogEmail: email.email });
+         toaster.create({
+            description: "Correo actualizado exitosamente.",
+            type: "info",
+         });
+      } catch (err) {
+         toaster.create({
+            description: "Error al actualizar correo.",
+            type: "error",
+         });
+      }
+   };
+   const handleChange = (field: keyof IEmail, value: string) => {
+      setEmailState((prev) => ({ ...prev, [field]: value }));
+   };
+
+   const handleDelete = async () => {
+      if (tries === 0) return setTries((s) => s + 1);
+      try {
+         await studentRegistryClient.deleteEmail(email.email);
+         toaster.create({
+            description: "Correo eliminado exitosamente.",
+            type: "info",
+         });
+      } catch (err) {
+         toaster.create({
+            description: "Error al eliminar correo.",
+            type: "error",
+         });
+      }
+   };
+
+   return (
+      <Box width={"100%"}>
+         <VStack width={"100%"} display={"flex"} alignItems={"flex-end"} mb={2}>
+            <IconButton onClick={() => setDangerZone((s) => !s)} size={"xs"} bgColor={"white"} color={"black"}>
+               <LuEllipsisVertical />
+            </IconButton>
+            <Presence present={dangerZone} style={{ width: "100%" }}>
+               <Text color={"red"} textAlign={"center"}>
+                  Zona de peligro
+               </Text>
+               <Box
+                  p={2}
+                  rounded={"md"}
+                  borderWidth={"thin"}
+                  borderColor={"red"}
+                  width={"100%"}
+                  display={"flex"}
+                  justifyContent={"center"}
+                  alignItems={"center"}
+               >
+                  <Button onClick={handleDelete}>Eliminar</Button>
+                  {tries > 0 && (
+                     <Text fontSize={"10px"} position={"absolute"} fontWeight={600} color={"red"} right={75}>
+                        Presiona nuevamente para elminar
+                     </Text>
+                  )}
+               </Box>
+            </Presence>
+         </VStack>
+         <HStack wrap={"wrap"}>
+            <Input
+               placeholder="Correo"
+               defaultValue={emailState.email}
+               onChange={(e) => handleChange("email", e.target.value)}
+            />
+            <Input
+               placeholder="Tipo de correo"
+               defaultValue={emailState.email_type}
+               onChange={(e) => handleChange("email_type", e.target.value)}
+            />
+         </HStack>
+         <HStack mt={5} width={"100%"} justifyContent={"flex-end"} gap={10}>
+            <Button onClick={handleSubmit} variant={"outline"}>
+               Cancelar
+            </Button>
+            <Button onClick={handleSubmit}>Guardar</Button>
+         </HStack>
+         <Toaster />
+      </Box>
+   );
+};
+
+export default EmailDialogContent;
