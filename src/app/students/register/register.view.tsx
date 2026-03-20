@@ -8,7 +8,7 @@ import PhoneRegisterStep from "@/components/stepper/phoneRegisterStep";
 import AddressRegisterStep from "@/components/stepper/addressRegisterStep";
 import studentRegistryClient from "@/lib/api/studentRegistryClient";
 import { toaster } from "@/components/ui/toaster";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export function StudentRegistryView() {
    const router = useRouter();

@@ -8,7 +8,7 @@ export interface formType<T extends FieldValues> {
 
 export enum genders {
    Masculino = "masculino",
-   Feminino = "feminino",
+   Femenino = "femenino",
    Otro = "otro",
 }
 
@@ -16,12 +16,14 @@ export const gendersCollections = createListCollection({
    items: Object.keys(genders).map((gender) => ({ label: gender, value: gender })),
 });
 
-export interface IStudent {
-   student_id: number;
+export interface IStudentbasicInfo {
    first_name: string;
    middle_name: string;
    last_name: string;
    gender: genders | string;
+}
+export interface IStudent extends IStudentbasicInfo {
+   student_id: number;
    phones: IPhone[];
    emails: IEmail[];
    addresses: IAddress[];

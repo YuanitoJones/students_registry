@@ -45,18 +45,20 @@ const VariableSizeCarousel = ({
                   <CarouselItem item={item} index={index} onClick={onClick} />
                ))}
             </Carousel.ItemGroup>
-            <Carousel.Control display={"flex"} justifyContent={"space-evenly"}>
-               <Carousel.PrevTrigger asChild>
-                  <IconButton size="xs" variant="surface">
-                     <LuChevronUp />
-                  </IconButton>
-               </Carousel.PrevTrigger>
-               <Carousel.NextTrigger asChild>
-                  <IconButton size="xs" variant="surface">
-                     <LuChevronDown />
-                  </IconButton>
-               </Carousel.NextTrigger>
-            </Carousel.Control>
+            {items.length > 0 && (
+               <Carousel.Control display={"flex"} justifyContent={"space-evenly"}>
+                  <Carousel.PrevTrigger asChild>
+                     <IconButton size="xs" variant="surface">
+                        <LuChevronUp />
+                     </IconButton>
+                  </Carousel.PrevTrigger>
+                  <Carousel.NextTrigger asChild>
+                     <IconButton size="xs" variant="surface">
+                        <LuChevronDown />
+                     </IconButton>
+                  </Carousel.NextTrigger>
+               </Carousel.Control>
+            )}
          </Carousel.Root>
       </VStack>
    );

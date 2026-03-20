@@ -38,6 +38,16 @@ class StudentsClient extends ApiClient {
       }
    }
 
+   async updateStudent(student_id: number, studentData: any) {
+      try {
+         const response = await this.put("/student", studentData, {
+            params: { student_id },
+         });
+      } catch (err) {
+         throw err;
+      }
+   }
+
    async deleteStudent(student_id: number) {
       try {
          const response = await this.delete("/student", {

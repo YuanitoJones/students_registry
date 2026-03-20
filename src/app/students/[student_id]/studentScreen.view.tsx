@@ -12,12 +12,13 @@ import InfoField from "@/components/ui/infoField";
 import { toaster } from "@/components/ui/toaster";
 import studentRegistryClient from "@/lib/api/studentRegistryClient";
 import { StudentContext } from "@/lib/context/studentContext";
-import { IAddress, IEmail, IPhone } from "@/lib/types/globalTypes";
+import { IAddress, IEmail, IPhone, IStudentbasicInfo } from "@/lib/types/globalTypes";
 import { Box, Button, HStack, IconButton, Text, VStack } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useContext, useState } from "react";
-import { LuTrash } from "react-icons/lu";
+import { LuPencil, LuTrash } from "react-icons/lu";
 import ConfirmationDialog from "@/components/Dialogs/confirmationDialog";
+import StudentDialogContent from "@/components/StudentInfoDialog/_student/studentDialogContent";
 
 function StudentScreen() {
    const router = useRouter();
@@ -65,6 +66,16 @@ function StudentScreen() {
                      <Text fontWeight={600} fontSize={"xl"} textAlign={"center"} mb={0}>
                         Información de estudiante
                      </Text>
+                     <IconButton
+                        position={"absolute"}
+                        right={10}
+                        top={0}
+                        variant={"ghost"}
+                        onClick={() => SET_EDIT_DIALOG(true)}
+                     >
+                        <LuPencil />
+                     </IconButton>
+
                      <IconButton
                         position={"absolute"}
                         right={0}
@@ -123,7 +134,11 @@ function StudentScreen() {
             }}
          />
          <DialogComponent title="Modificar estudiante" open={editDialog} setOpen={(open) => SET_EDIT_DIALOG(open)}>
-            <DialogContent content={dialogContext} />
+            <DialogContent
+               content={{
+                  ...studentData,
+               }}
+            />
          </DialogComponent>
          {dialogType && (
             <DialogComponent title="Agregar info" open={registerdialog} setOpen={(open) => SET_REGISTER_DIALOG(open)}>
@@ -144,10 +159,11 @@ function StudentScreen() {
 }
 export default StudentScreen;
 
-function DialogContent<T extends IPhone | IEmail | IAddress>({ content }: { content: T }) {
+function DialogContent<T extends IPhone | IEmail | IAddress | IStudentbasicInfo>({ content }: { content: T }) {
    if ("phone_id" in content) return <PhoneDialogContent phone={content} />;
    if ("email" in content) return <EmailDialogContent email={content} />;
    if ("address_id" in content) return <AddressDialogContent address={content} />;
+   if ("first_name" in content) return <StudentDialogContent />;
 }
 
 function RegisterContent({ type }: { type: "phone" | "email" | "address" }) {

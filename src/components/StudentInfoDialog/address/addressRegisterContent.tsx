@@ -1,4 +1,4 @@
-import { IAddress, IEmail } from "@/lib/types/globalTypes";
+import { IAddress } from "@/lib/types/globalTypes";
 import { Box, Button, HStack, Input, Textarea } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import studentRegistryClient from "@/lib/api/studentRegistryClient";
