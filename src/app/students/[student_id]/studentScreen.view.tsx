@@ -133,12 +133,15 @@ function StudentScreen() {
                ),
             }}
          />
-         <DialogComponent title="Modificar estudiante" open={editDialog} setOpen={(open) => SET_EDIT_DIALOG(open)}>
-            <DialogContent
-               content={{
-                  ...studentData,
-               }}
-            />
+         <DialogComponent
+            title="Modificar estudiante"
+            open={editDialog}
+            setOpen={(open) => {
+               SET_EDIT_DIALOG(open);
+               setDialogContext(null);
+            }}
+         >
+            <DialogContent content={dialogContext ? { ...dialogContext } : { ...studentData }} />
          </DialogComponent>
          {dialogType && (
             <DialogComponent title="Agregar info" open={registerdialog} setOpen={(open) => SET_REGISTER_DIALOG(open)}>
